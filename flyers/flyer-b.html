@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI業務改善チェック - Pattern B フライヤー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ========== Reset & Base ========== */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* ========== A4 Print Settings ========== */
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .flyer-page {
+      width: 190mm !important;
+      height: 277mm !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+      overflow: hidden !important;
+    }
+  }
+
+  /* ========== Screen Preview ========== */
+  html {
+    background: #e8e8e8;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #2d3436;
+    line-height: 1.55;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .flyer-page {
+    width: 190mm;
+    height: 277mm;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ========== Header ========== */
+  .header {
+    background: linear-gradient(135deg, #006e4a 0%, #00875a 50%, #00b37a 100%);
+    padding: 10mm 8mm 8mm 8mm;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 30%;
+    width: 200px;
+    height: 80px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5mm;
+    position: relative;
+    z-index: 1;
+  }
+
+  .service-name {
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.18);
+    padding: 2px 12px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .collab-label {
+    font-size: 8pt;
+    font-weight: 400;
+    opacity: 0.85;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-headline {
+    font-size: 18pt;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 3mm;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  .hero-headline .em-green {
+    background: rgba(255,255,255,0.2);
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+
+  .hero-sub {
+    font-size: 9pt;
+    font-weight: 400;
+    opacity: 0.92;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ========== Features Section ========== */
+  .features {
+    display: flex;
+    gap: 4mm;
+    padding: 5mm 6mm 4mm 6mm;
+  }
+
+  .feature-card {
+    flex: 1;
+    background: #edf6f2;
+    border-radius: 6px;
+    padding: 4mm;
+    text-align: center;
+    border: 1px solid #c8e6d8;
+    position: relative;
+  }
+
+  .feature-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #00875a, #00b37a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2.5mm auto;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,135,90,0.25);
+  }
+
+  .feature-title {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #00875a;
+    margin-bottom: 1.5mm;
+    letter-spacing: 0.3px;
+  }
+
+  .feature-desc {
+    font-size: 7.5pt;
+    color: #4a5568;
+    line-height: 1.45;
+  }
+
+  /* ========== Dual Column: Worry + Safety ========== */
+  .dual-section {
+    display: flex;
+    gap: 4mm;
+    padding: 0 6mm;
+    margin-bottom: 3mm;
+  }
+
+  .worry-box {
+    flex: 1;
+    background: #fef9f0;
+    border: 1px solid #f0dcc0;
+    border-radius: 6px;
+    padding: 3.5mm 4mm;
+  }
+
+  .worry-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #c07a28;
+    margin-bottom: 2mm;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .worry-title::before {
+    content: '!';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: #e8a940;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .worry-list {
+    list-style: none;
+  }
+
+  .worry-list li {
+    font-size: 7.5pt;
+    color: #6b5a3e;
+    padding: 1mm 0;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .worry-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: #e8a940;
+    border-radius: 50%;
+  }
+
+  .safety-box {
+    flex: 1.15;
+    background: #edf6f2;
+    border: 2px solid #00875a;
+    border-radius: 6px;
+    padding: 3.5mm 4mm;
+  }
+
+  .safety-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #00875a;
+    margin-bottom: 2mm;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .safety-title::before {
+    content: '\25C6';
+    color: #00875a;
+    font-size: 10px;
+  }
+
+  .safety-list {
+    list-style: none;
+  }
+
+  .safety-list li {
+    font-size: 7.5pt;
+    color: #2d5a3e;
+    padding: 1.2mm 0;
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.45;
+  }
+
+  .safety-list li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    background: #00875a;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ========== Arrow Connector ========== */
+  .arrow-connector {
+    text-align: center;
+    padding: 1mm 0 2mm 0;
+  }
+
+  .arrow-connector span {
+    display: inline-block;
+    color: #00875a;
+    font-size: 16pt;
+    line-height: 1;
+  }
+
+  /* ========== Pricing Section ========== */
+  .pricing-section {
+    padding: 0 6mm;
+    margin-bottom: 3.5mm;
+  }
+
+  .pricing-label {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #00875a;
+    text-align: center;
+    margin-bottom: 3mm;
+    position: relative;
+  }
+
+  .pricing-label::before,
+  .pricing-label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 20%;
+    height: 1px;
+    background: #b0d8c8;
+  }
+
+  .pricing-label::before {
+    left: 5%;
+  }
+
+  .pricing-label::after {
+    right: 5%;
+  }
+
+  .pricing-grid {
+    display: flex;
+    gap: 3mm;
+  }
+
+  .price-card {
+    flex: 1;
+    border: 1.5px solid #c8e6d8;
+    border-radius: 6px;
+    overflow: hidden;
+    text-align: center;
+    background: #fff;
+  }
+
+  .price-card.recommended {
+    border-color: #00875a;
+    box-shadow: 0 2px 8px rgba(0,135,90,0.15);
+  }
+
+  .price-card-header {
+    background: #edf6f2;
+    padding: 2mm 2mm;
+    border-bottom: 1px solid #c8e6d8;
+  }
+
+  .price-card.recommended .price-card-header {
+    background: linear-gradient(135deg, #00875a, #00b37a);
+    color: #fff;
+    border-bottom-color: #00875a;
+  }
+
+  .plan-name {
+    font-size: 9pt;
+    font-weight: 700;
+  }
+
+  .price-card-body {
+    padding: 2.5mm 3mm;
+  }
+
+  .price-amount {
+    font-size: 16pt;
+    font-weight: 900;
+    color: #00875a;
+    line-height: 1.2;
+  }
+
+  .price-amount .yen {
+    font-size: 9pt;
+    font-weight: 500;
+  }
+
+  .price-amount .tax {
+    font-size: 6.5pt;
+    font-weight: 400;
+    color: #718096;
+    display: block;
+  }
+
+  .price-desc {
+    font-size: 7pt;
+    color: #5a6a72;
+    margin-top: 1mm;
+    line-height: 1.4;
+  }
+
+  .recommend-badge {
+    display: inline-block;
+    background: #ffffff;
+    color: #00875a;
+    font-size: 6pt;
+    font-weight: 700;
+    padding: 0.5mm 2mm;
+    border-radius: 3px;
+    margin-top: 1mm;
+  }
+
+  /* ========== CTA Section ========== */
+  .cta-section {
+    background: linear-gradient(135deg, #006e4a 0%, #00875a 60%, #00b37a 100%);
+    padding: 4mm 6mm;
+    color: #ffffff;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  .cta-lead {
+    font-size: 10pt;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3mm;
+    letter-spacing: 0.3px;
+  }
+
+  .cta-content {
+    display: flex;
+    align-items: center;
+    gap: 5mm;
+  }
+
+  .cta-info {
+    flex: 1;
+  }
+
+  .cta-phone-row {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+    margin-bottom: 2mm;
+  }
+
+  .phone-icon {
+    width: 22px;
+    height: 22px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .phone-number {
+    font-size: 15pt;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+  }
+
+  .phone-hours {
+    font-size: 7pt;
+    opacity: 0.85;
+    margin-left: 4px;
+  }
+
+  .cta-url {
+    font-size: 7.5pt;
+    opacity: 0.9;
+    margin-top: 1mm;
+    letter-spacing: 0.3px;
+  }
+
+  .cta-url a {
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+
+  .qr-area {
+    width: 80px;
+    height: 80px;
+    background: #ffffff;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #718096;
+    font-size: 7.5pt;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.3;
+    border: 1px dashed #b0d8c8;
+  }
+
+  /* ========== Footer ========== */
+  .footer {
+    background: #f7faf9;
+    border-top: 1px solid #d4e8de;
+    padding: 2mm 6mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .footer-company {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #00875a;
+  }
+
+  .footer-company-en {
+    font-size: 6.5pt;
+    color: #90a4ae;
+    font-weight: 400;
+  }
+
+  .footer-partner {
+    font-size: 6.5pt;
+    color: #90a4ae;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer-page">
+
+  <!-- ===== Header ===== -->
+  <div class="header">
+    <div class="header-top">
+      <span class="service-name">AI業務改善チェック</span>
+      <span class="collab-label">Rit × デジタルツール研究所</span>
+    </div>
+    <div class="hero-headline">
+      <span class="em-green">リスクゼロ</span>で始められる、<br>安心のAI導入業務診断サービス
+    </div>
+    <div class="hero-sub">
+      データ外部送信なし、業務中断なし。安心して始められるAI業務診断
+    </div>
+  </div>
+
+  <!-- ===== 3 Features ===== -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="feature-title">外部送信なし</div>
+      <div class="feature-desc">データはローカル保存。<br>社外へのデータ送信はありません</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-title">業務中断なし</div>
+      <div class="feature-desc">日常業務を続けながら<br>自然にデータ収集</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="feature-title">1名から開始OK</div>
+      <div class="feature-desc">まず1名で試して、効果を<br>確認してから全社展開</div>
+    </div>
+  </div>
+
+  <!-- ===== Worry + Safety Dual Section ===== -->
+  <div class="dual-section">
+    <div class="worry-box">
+      <div class="worry-title">こんな不安ありませんか？</div>
+      <ul class="worry-list">
+        <li>社員のデータが外部に漏れないか心配</li>
+        <li>調査で業務が止まるのでは？</li>
+        <li>AI導入で何か問題が起きたら…</li>
+      </ul>
+    </div>
+    <div class="safety-box">
+      <div class="safety-title">安心ポイント</div>
+      <ul class="safety-list">
+        <li>PC操作ログはローカル保存（外部送信一切なし）</li>
+        <li>NDA（秘密保持契約）を締結してから調査開始</li>
+        <li>1名から始められるので、全社導入のリスクなし</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Arrow ===== -->
+  <div class="arrow-connector">
+    <span>&#9660;</span>
+  </div>
+
+  <!-- ===== Pricing ===== -->
+  <div class="pricing-section">
+    <div class="pricing-label">料金プラン</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-card-header">
+          <div class="plan-name">セルフプラン</div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-amount">
+            50,000<span class="yen">円</span>
+            <span class="tax">（税別）</span>
+          </div>
+          <div class="price-desc">1名分の調査＋提案書</div>
+        </div>
+      </div>
+      <div class="price-card recommended">
+        <div class="price-card-header">
+          <div class="plan-name">おまかせプラン</div>
+          <div class="recommend-badge">おすすめ</div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-amount">
+            100,000<span class="yen">円</span>
+            <span class="tax">（税別）</span>
+          </div>
+          <div class="price-desc">1名分の精密調査＋提案書</div>
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-header">
+          <div class="plan-name">全社パック</div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-amount" style="font-size:12pt;padding-top:2mm;">
+            お見積もり
+            <span class="tax">&nbsp;</span>
+          </div>
+          <div class="price-desc">10名以上の全社診断</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <div class="cta-section">
+    <div class="cta-lead">まずは無料相談から、安心してお問い合わせください</div>
+    <div class="cta-content">
+      <div class="cta-info">
+        <div class="cta-phone-row">
+          <span class="phone-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </span>
+          <span class="phone-number">048-871-7160</span>
+          <span class="phone-hours">（平日9:30〜18:30）</span>
+        </div>
+        <div class="cta-url">
+          <a href="https://ai-check.example.com">https://ai-check.example.com</a>
+        </div>
+      </div>
+      <div class="qr-area">QR<br>コード</div>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <div class="footer">
+    <div>
+      <span class="footer-company">株式会社Rit</span>
+      <span class="footer-company-en">&nbsp;&nbsp;Rit Inc.</span>
+    </div>
+    <div class="footer-partner">協力：株式会社デジタルツール研究所</div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="30" viewBox="0 0 44 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="icon_mail.svg" class="cls-1" d="M99.519,28635H58.48a1.569,1.569,0,0,1-1.492-1.7v-26.5a1.632,1.632,0,0,1,1.492-1.7h0.61l19.049,22.5a0.491,0.491,0,0,0,.791,0l19.049-22.5h1.54a1.631,1.631,0,0,1,1.493,1.7v26.5A1.569,1.569,0,0,1,99.519,28635Zm-38.846-29.9H96.4l-17.862,21.1Z" transform="translate(-57 -28605.1)"/>
+</svg>

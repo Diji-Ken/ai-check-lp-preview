@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI業務改善チェック - Pattern A (Blue/Cost)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ========== Reset & Base ========== */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9pt;
+    line-height: 1.5;
+    color: #1a2233;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media screen {
+    html {
+      background: #ccc;
+    }
+    body {
+      margin: 20px auto;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.18);
+    }
+  }
+
+  @media print {
+    html, body {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+
+  /* ========== Page Container ========== */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+  }
+
+  /* ========== Header ========== */
+  .header {
+    background: linear-gradient(135deg, #004fc5 0%, #0058db 40%, #0078ff 100%);
+    color: #fff;
+    padding: 9mm 10mm 8mm;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -30mm;
+    right: -20mm;
+    width: 80mm;
+    height: 80mm;
+    background: radial-gradient(circle, rgba(0,162,255,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -15mm;
+    left: 20mm;
+    width: 50mm;
+    height: 50mm;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .service-label {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    padding: 1.5mm 4mm;
+    font-size: 7.5pt;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  .header-partner {
+    font-size: 7.5pt;
+    font-weight: 400;
+    opacity: 0.85;
+    letter-spacing: 0.05em;
+  }
+
+  .header-main {
+    margin-top: 5mm;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-title {
+    font-size: 22pt;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .header-title .accent {
+    color: #b8dfff;
+  }
+
+  .header-sub {
+    margin-top: 3mm;
+    font-size: 9.5pt;
+    font-weight: 400;
+    opacity: 0.92;
+    line-height: 1.55;
+    letter-spacing: 0.03em;
+  }
+
+  /* ========== Body Content ========== */
+  .body-content {
+    padding: 6mm 10mm 0;
+  }
+
+  /* ========== 3 Features ========== */
+  .features {
+    display: flex;
+    gap: 4mm;
+    margin-bottom: 5mm;
+  }
+
+  .feature-card {
+    flex: 1;
+    background: #eff4f8;
+    border-radius: 3mm;
+    padding: 4.5mm 4mm 4mm;
+    text-align: center;
+    border: 1px solid #dde6f0;
+    position: relative;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 0.8mm;
+    background: linear-gradient(90deg, #0058db, #00a2ff);
+    border-radius: 0 0 2mm 2mm;
+  }
+
+  .feature-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 7mm;
+    height: 7mm;
+    background: linear-gradient(135deg, #0058db, #0078ff);
+    color: #fff;
+    font-size: 8pt;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-bottom: 2mm;
+  }
+
+  .feature-value {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0058db;
+    line-height: 1.2;
+    margin-bottom: 1.5mm;
+  }
+
+  .feature-desc {
+    font-size: 7.5pt;
+    color: #3a4a5c;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  /* ========== Concerns Section ========== */
+  .concerns {
+    background: #fff;
+    border: 1.5px solid #0058db;
+    border-radius: 3mm;
+    padding: 4mm 5mm;
+    margin-bottom: 5mm;
+  }
+
+  .section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0058db;
+    margin-bottom: 2.5mm;
+    display: flex;
+    align-items: center;
+    gap: 2mm;
+  }
+
+  .section-title .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 6mm;
+    height: 6mm;
+    background: #0058db;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 8pt;
+    font-weight: 700;
+  }
+
+  .concerns-list {
+    display: flex;
+    gap: 4mm;
+  }
+
+  .concern-item {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 2mm;
+    font-size: 8pt;
+    line-height: 1.45;
+    color: #2a3a4c;
+  }
+
+  .concern-check {
+    flex-shrink: 0;
+    width: 4.5mm;
+    height: 4.5mm;
+    border: 1.5px solid #0058db;
+    border-radius: 1mm;
+    margin-top: 0.5mm;
+    position: relative;
+  }
+
+  .concern-check::after {
+    content: '';
+    position: absolute;
+    top: 0.3mm;
+    left: 1.2mm;
+    width: 1.5mm;
+    height: 2.5mm;
+    border-right: 1.5px solid #0058db;
+    border-bottom: 1.5px solid #0058db;
+    transform: rotate(40deg);
+  }
+
+  /* ========== Flow Section ========== */
+  .flow-section {
+    margin-bottom: 5mm;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: 1mm;
+  }
+
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 4.5mm;
+    right: -2mm;
+    width: 4mm;
+    height: 0;
+    border-top: 1.5px solid #0058db;
+  }
+
+  .flow-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 3mm;
+    right: -2.5mm;
+    width: 0;
+    height: 0;
+    border-top: 2mm solid transparent;
+    border-bottom: 2mm solid transparent;
+    border-left: 2.5mm solid #0058db;
+  }
+
+  .flow-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 9mm;
+    height: 9mm;
+    background: linear-gradient(135deg, #0058db, #0078ff);
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-bottom: 1.5mm;
+  }
+
+  .flow-label {
+    font-size: 7.5pt;
+    font-weight: 600;
+    color: #1a2233;
+    line-height: 1.35;
+  }
+
+  .flow-note {
+    font-size: 6.5pt;
+    color: #6a7a8c;
+    margin-top: 0.5mm;
+  }
+
+  /* ========== Pricing Section ========== */
+  .pricing-section {
+    margin-bottom: 5mm;
+  }
+
+  .pricing-cards {
+    display: flex;
+    gap: 3.5mm;
+    margin-top: 1mm;
+  }
+
+  .pricing-card {
+    flex: 1;
+    border-radius: 3mm;
+    overflow: hidden;
+    border: 1.5px solid #dde6f0;
+    background: #fff;
+    position: relative;
+  }
+
+  .pricing-card.recommended {
+    border-color: #0058db;
+    box-shadow: 0 1mm 4mm rgba(0,88,219,0.15);
+  }
+
+  .pricing-card.recommended .pricing-header {
+    background: linear-gradient(135deg, #004fc5, #0078ff);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -0.5mm;
+    right: 3mm;
+    background: #ff6b35;
+    color: #fff;
+    font-size: 6pt;
+    font-weight: 700;
+    padding: 0.8mm 2.5mm;
+    border-radius: 0 0 2mm 2mm;
+    letter-spacing: 0.05em;
+  }
+
+  .pricing-header {
+    background: linear-gradient(135deg, #3a5a8c, #4a7ab5);
+    color: #fff;
+    padding: 2.5mm 3mm;
+    text-align: center;
+  }
+
+  .pricing-name {
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .pricing-body {
+    padding: 3mm 3mm 3.5mm;
+    text-align: center;
+  }
+
+  .pricing-price {
+    font-size: 16pt;
+    font-weight: 900;
+    color: #0058db;
+    line-height: 1.1;
+  }
+
+  .pricing-price .yen {
+    font-size: 9pt;
+    font-weight: 600;
+  }
+
+  .pricing-price .tax {
+    font-size: 6.5pt;
+    font-weight: 400;
+    color: #6a7a8c;
+    display: block;
+    margin-top: 0.5mm;
+  }
+
+  .pricing-detail {
+    font-size: 7pt;
+    color: #3a4a5c;
+    margin-top: 1.5mm;
+    line-height: 1.45;
+    padding-top: 1.5mm;
+    border-top: 1px solid #eef2f7;
+  }
+
+  .pricing-price.estimate {
+    font-size: 12pt;
+  }
+
+  /* ========== CTA Section ========== */
+  .cta-section {
+    background: linear-gradient(135deg, #004fc5 0%, #0058db 40%, #0078ff 100%);
+    border-radius: 3mm;
+    padding: 5mm 6mm;
+    display: flex;
+    align-items: center;
+    gap: 5mm;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 4mm;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -10mm;
+    right: -5mm;
+    width: 40mm;
+    height: 40mm;
+    background: radial-gradient(circle, rgba(0,162,255,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cta-left {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-heading {
+    font-size: 14pt;
+    font-weight: 700;
+    margin-bottom: 2mm;
+    letter-spacing: 0.04em;
+  }
+
+  .cta-phone {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+    margin-bottom: 1mm;
+  }
+
+  .cta-phone-label {
+    font-size: 7pt;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  .cta-phone-number {
+    font-size: 16pt;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .cta-phone-hours {
+    font-size: 7pt;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .cta-url {
+    margin-top: 1.5mm;
+    font-size: 7.5pt;
+    opacity: 0.85;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+  }
+
+  .cta-right {
+    flex-shrink: 0;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .qr-box {
+    width: 22mm;
+    height: 22mm;
+    background: #fff;
+    border-radius: 2mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6a7a8c;
+    font-size: 7pt;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .qr-label {
+    margin-top: 1mm;
+    font-size: 6pt;
+    opacity: 0.75;
+  }
+
+  /* ========== Footer ========== */
+  .footer {
+    text-align: center;
+    padding: 2mm 10mm;
+    border-top: 0.5px solid #dde6f0;
+  }
+
+  .footer-company {
+    font-size: 9pt;
+    font-weight: 600;
+    color: #1a2233;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-company-en {
+    font-size: 6.5pt;
+    color: #8a9aac;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    margin-top: 0.3mm;
+  }
+
+  /* ========== Decorative Elements ========== */
+  .page-border {
+    position: absolute;
+    top: 3mm;
+    left: 3mm;
+    right: 3mm;
+    bottom: 3mm;
+    border: 0.3mm solid #dde6f0;
+    border-radius: 2mm;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page > *:not(.page-border) {
+    position: relative;
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-border"></div>
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-top">
+      <span class="service-label">AI BUSINESS DIAGNOSIS</span>
+      <span class="header-partner">Rit &times; デジタルツール研究所</span>
+    </div>
+    <div class="header-main">
+      <h1 class="header-title">
+        AI<span class="accent">業務改善</span>チェック
+      </h1>
+      <p class="header-sub">
+        まずは知ることから始める、<strong>1名5万円から</strong>の業務AI化診断<br>
+        業務のムダを可視化し、AI活用の効果を「コスト」で見える化
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== BODY ===== -->
+  <div class="body-content">
+
+    <!-- 3 Features -->
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-number">1</div>
+        <div class="feature-value">1名5万円~</div>
+        <div class="feature-desc">コンサルの1/10以下のコストで<br>業務診断が可能</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-number">2</div>
+        <div class="feature-value">3チャネル方式</div>
+        <div class="feature-desc">PC操作ログ・音声・日報の<br>3つのデータで精密分析</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-number">3</div>
+        <div class="feature-value">提案書を納品</div>
+        <div class="feature-desc">AI分析による改善提案書を<br>そのままお渡し</div>
+      </div>
+    </div>
+
+    <!-- Concerns -->
+    <div class="concerns">
+      <div class="section-title">
+        <span class="icon">?</span>
+        こんなお悩みありませんか？
+      </div>
+      <div class="concerns-list">
+        <div class="concern-item">
+          <span class="concern-check"></span>
+          <span>AIを導入したいけど効果がわからない</span>
+        </div>
+        <div class="concern-item">
+          <span class="concern-check"></span>
+          <span>コンサルに頼むと費用が高すぎる</span>
+        </div>
+        <div class="concern-item">
+          <span class="concern-check"></span>
+          <span>現状把握だけで膨大な工数がかかる</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow -->
+    <div class="flow-section">
+      <div class="section-title">
+        <span class="icon" style="font-size:7pt;">&#9654;</span>
+        サービスの流れ
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-label">お問い合わせ</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-label">ヒアリング</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-label">業務データ収集</div>
+          <div class="flow-note">(1週間)</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-label">AI分析・<br>提案書作成</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-label">提案書の<br>納品・説明</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="pricing-section">
+      <div class="section-title">
+        <span class="icon" style="font-size:7pt;">&#9733;</span>
+        料金プラン
+      </div>
+      <div class="pricing-cards">
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-name">セルフプラン</div>
+          </div>
+          <div class="pricing-body">
+            <div class="pricing-price">
+              50,000<span class="yen">円</span>
+              <span class="tax">(税別)</span>
+            </div>
+            <div class="pricing-detail">1名分の調査＋提案書</div>
+          </div>
+        </div>
+        <div class="pricing-card recommended">
+          <span class="pricing-badge">おすすめ</span>
+          <div class="pricing-header">
+            <div class="pricing-name">おまかせプラン</div>
+          </div>
+          <div class="pricing-body">
+            <div class="pricing-price">
+              100,000<span class="yen">円</span>
+              <span class="tax">(税別)</span>
+            </div>
+            <div class="pricing-detail">1名分の精密調査＋提案書</div>
+          </div>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-name">全社パック</div>
+          </div>
+          <div class="pricing-body">
+            <div class="pricing-price estimate">
+              お見積もり
+            </div>
+            <div class="pricing-detail">10名以上の全社診断</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-left">
+        <div class="cta-heading">まずは無料相談から</div>
+        <div class="cta-phone">
+          <span class="cta-phone-label">TEL</span>
+          <span class="cta-phone-number">048-871-7160</span>
+        </div>
+        <div class="cta-phone-hours">平日 9:30〜18:30</div>
+        <div class="cta-url">https://ai-check.example.com</div>
+      </div>
+      <div class="cta-right">
+        <div class="qr-box">QRコード</div>
+        <div class="qr-label">詳細はこちら</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <div class="footer-company">株式会社Rit</div>
+    <div class="footer-company-en">Rit Inc.</div>
+  </div>
+
+</div>
+</body>
+</html>
